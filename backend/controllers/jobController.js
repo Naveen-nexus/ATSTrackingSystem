@@ -87,7 +87,25 @@ const getJobs = async (req, res) => {
   }
 };
 
+// @desc    Get job by ID
+// @route   GET /api/jobs/:id
+// @access  Public
+const getJobById = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id).populate('postedBy', 'name email companyLogo');
+
+    if (job) {
+      res.json(job);
+    } else {
+      res.status(404).json({ message: 'Job not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createJob,
   getJobs,
+  getJobById,
 };
